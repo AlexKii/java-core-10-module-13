@@ -1,0 +1,23 @@
+{
+    "id": 11,
+    "name": "Richard Daniel Sanchez",
+    "username": "Rick C-137",
+    "email": "rickandmorty@fandom.com",
+    "address": {
+      "street": "Dayna Park",
+      "suite": "Suite 449",
+      "city": "Bartholomebury",
+      "zipcode": "76495-3109",
+      "geo": {
+        "lat": "24.6463",
+        "lng": "-168.8889"
+      }
+    },
+    "phone": "(775)976-6794 x41206",
+    "website": "rickandmorty.fandom.com",
+    "company": {
+      "name": "the Citadel of Ricks",
+      "catchPhrase": "Wubba Lubba Dub Dub",
+      "bs": "aggregate real-time technologies"
+    }
+  }
