@@ -16,7 +16,7 @@ public class MyHttpClient {
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
     private static final String BASE = "files";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    
+
     public static void createNewUser() throws Exception {
 
         HttpRequest request = HttpRequest.newBuilder()
