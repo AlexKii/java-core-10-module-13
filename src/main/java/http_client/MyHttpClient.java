@@ -8,11 +8,16 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MyHttpClient {
     private MyHttpClient() {
         throw new IllegalStateException("Utility class");
     }
+
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
     private static final String BASE = "files";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -101,7 +106,7 @@ public class MyHttpClient {
         String json = CLIENT.send(postsRequest, HttpResponse.BodyHandlers.ofString()).body();
 
         JsonArray arr = new JsonParser().parse(json).getAsJsonArray();
-        String lastPostId = arr.get(arr.size()-1).getAsJsonObject().get("id").getAsString();
+        String lastPostId = arr.get(arr.size() - 1).getAsJsonObject().get("id").getAsString();
 
         HttpRequest commentsRequest = HttpRequest.newBuilder()
                 .uri(URI.create("https://jsonplaceholder.typicode.com/posts/" + lastPostId + "/comments"))
@@ -117,21 +122,18 @@ public class MyHttpClient {
 
     public static void getOpenTasksByUserId(int id) throws Exception {
 
-        HttpRequest postsRequest = HttpRequest.newBuilder()
+        HttpRequest tasksRequest = HttpRequest.newBuilder()
                 .uri(URI.create("https://jsonplaceholder.typicode.com/users/" + id + "/todos"))
                 .timeout(Duration.ofSeconds(10))
                 .header("Content-Type", "application/json")
                 .GET()
                 .build();
 
-        String json = CLIENT.send(postsRequest, HttpResponse.BodyHandlers.ofString()).body();
-        JsonArray arr = new JsonParser().parse(json).getAsJsonArray();
+        String json = CLIENT.send(tasksRequest, HttpResponse.BodyHandlers.ofString()).body();
 
-        for (int i = 0; i < arr.size(); i++) {
-            if (arr.get(i).getAsJsonObject().get("completed").getAsBoolean() == false) {
-                System.out.println(gson.toJson(arr.get(i)));
-            }
-        }
+        new JsonParser().parse(json).getAsJsonArray().asList().stream()
+                .filter(el -> !el.getAsJsonObject().get("completed").getAsBoolean())
+                .forEach(el -> System.out.println(gson.toJson(el.getAsJsonObject())));
     }
 
     private static void sendAsyncRequest(HttpRequest request) {
